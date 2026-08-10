@@ -300,7 +300,8 @@
 
         /* Ensure parent containers can hold absolute positioned buttons */
         .about .row .content, 
-        .education .box-container .box .content,
+        .about .row .content .box-container .box,
+        .education .box-container .box,
         .experience .content,
         .work .box-container .box,
         .our-skills .skill,
@@ -633,9 +634,10 @@
         <div class="popup" id="transcriptPopup">
             <div class="popup-content">
                 <div class="admin-actions" style="top: 0; right: 0;">
-                    <button class="btn-edit" title="Change PDF Link"><i class="fas fa-edit"></i></button>
+                    <button class="btn-edit" title="Edit Image"><i class="fas fa-edit"></i></button>
                 </div>
-                <embed src="./assets/images/transcript1.pdf" type="application/pdf" width="100%" height="600px"></embed>
+                <img src="./assets/images/transcript1.png" alt="Transcript">
+                <br>
                 <button id="closeBtn1">Close</button>
             </div>
         </div>
@@ -722,12 +724,12 @@
 
         <div class="box-container">
             <div class="box">
+                <div class="admin-actions">
+                    <button class="btn-edit" title="Edit"><i class="fas fa-edit"></i></button>
+                    <button class="btn-delete" title="Delete"><i class="fas fa-trash"></i></button>
+                </div>
                 <div class="image"><img draggable="false" src="./assets/images/secabs.jpg" alt=""></div>
                 <div class="content">
-                    <div class="admin-actions">
-                        <button class="btn-edit" title="Edit"><i class="fas fa-edit"></i></button>
-                        <button class="btn-delete" title="Delete"><i class="fas fa-trash"></i></button>
-                    </div>
                     <h3>Bachelor of Engineering in Computer Science</h3>
                     <p>Secab Institute of Engineering and Technology</p>
                     <h4>2019-2023 | Completed</h4>
@@ -737,12 +739,12 @@
                 </div>
             </div>
             <div class="box">
+                <div class="admin-actions">
+                    <button class="btn-edit" title="Edit"><i class="fas fa-edit"></i></button>
+                    <button class="btn-delete" title="Delete"><i class="fas fa-trash"></i></button>
+                </div>
                 <div class="image"><img draggable="false" src="./assets/images/educat/school.jpg" alt=""></div>
                 <div class="content">
-                    <div class="admin-actions">
-                        <button class="btn-edit" title="Edit"><i class="fas fa-edit"></i></button>
-                        <button class="btn-delete" title="Delete"><i class="fas fa-trash"></i></button>
-                    </div>
                     <h3>Pure Science +2</h3>
                     <p>Shri Janata Higher Secondary College | NEB</p>
                     <h4>2016-2018 | Completed</h4>
@@ -1245,24 +1247,6 @@
                 input.click();
             });
 
-            // EDIT PDFs (Embed tag in Transcript popup)
-            $(document).on('click', '.is-editing embed', function(e) {
-                e.preventDefault();
-                let embed = $(this);
-                let input = document.createElement('input');
-                input.type = 'file';
-                input.accept = 'application/pdf';
-                input.onchange = ev => {
-                    let file = ev.target.files[0];
-                    let reader = new FileReader();
-                    reader.onload = event => {
-                        embed.attr('src', event.target.result);
-                    };
-                    reader.readAsDataURL(file);
-                };
-                input.click();
-            });
-
             // EDIT PROGRESS BARS
             $(document).on('click', '.is-editing .progress-line', function() {
                 let newVal = prompt("Enter percentage (0-100):");
@@ -1380,6 +1364,13 @@
                     let tiltItems = clone.querySelectorAll('.tilt');
                     tiltItems.forEach(el => {
                         el.removeAttribute('style');
+                    });
+                    
+                    // Clean up ScrollReveal styles to prevent elements from missing/staying hidden
+                    let srItems = clone.querySelectorAll('[data-sr-id]');
+                    srItems.forEach(el => {
+                        el.removeAttribute('style');
+                        el.removeAttribute('data-sr-id');
                     });
 
                     // Build Final String
